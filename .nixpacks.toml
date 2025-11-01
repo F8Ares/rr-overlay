@@ -1,16 +1,10 @@
 [build]
-  builder = "NIXPACKS"
-  buildCommand = "npm install"
+builder = "NIXPACKS"
+buildCommand = "npm install"
 
 [deploy]
-  startCommand = "node server.js"
-
-[inputs]
-  buildInputs = [
-    pkgs.python310
-    pkgs.nodejs
-    pkgs.npm
-  ]
+startCommand = "node server.js"
 
 [env]
-  PIPENV_DEFAULT_PYTHON_VERSION = "3.10"  # Force Python 3.10 to be used
+PYTHON_VERSION = "3.10"
+NODE_ENV = "production"
