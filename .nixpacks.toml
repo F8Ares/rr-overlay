@@ -3,3 +3,12 @@ cmds = ["npm install"]
 
 [phases.start]
 cmd = "node server.js"
+
+# In your .nixpacks file or nix configuration
+{ pkgs ? import <nixpkgs> {} }:
+
+pkgs.buildInputs = [
+  pkgs.python310   # Ensure this points to a compatible Python version.
+  pkgs.nodejs
+  pkgs.npm
+];

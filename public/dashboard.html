@@ -1,218 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Creator Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="config.js"></script>
-  <style>
-    :root{
-      --bg:#0f0c14; --panel:#1a1621; --panel-2:#221c2b;
-      --text:#e7dcff; --muted:#b9a8e6; --brand:#8b5cf6; --danger:#ef4444;
-      --ring: #9f7aea;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; background:var(--bg); color:var(--text);
-      font-family:Inter,system-ui,Segoe UI,Roboto,Arial; line-height:1.4;
-    }
-    .wrap{max-width:900px;margin:48px auto;padding:0 20px}
-    h1{margin:0 0 8px;font-size:28px}
-    .sub{color:var(--muted);margin:0 0 24px}
-    .bar{
-      background:var(--panel); border:1px solid #2b2140; border-radius:14px;
-      padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px;
-    }
-    .hello{color:var(--muted)}
-    .pill{background:var(--danger);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-    .section{background:var(--panel);border:1px solid #2b2140;border-radius:14px;padding:16px;margin-top:18px}
-    .row{display:flex;gap:10px}
-    .row > *{flex:1}
-    .label{font-size:12px;color:var(--muted);margin-bottom:6px}
-    input[type="text"], input[type="number"]{
-      width:100%;background:var(--panel-2);color:var(--text);
-      border:1px solid #2b2140;border-radius:10px;padding:12px 12px;font-size:14px;
-      outline:none; box-shadow:0 0 0 0 transparent;
-    }
-    input:focus{border-color:var(--ring); box-shadow:0 0 0 2px #7c3aed33}
-    .copyRow{display:flex;gap:10px; align-items:center}
-    .copyRow input{font-family:Inter,monospace}
-    .btn{
-      background:var(--brand); color:#fff; border:0; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer
-    }
-    .gridCol{display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px}
-    .save{margin-top:14px}
-    .note{font-size:12px; color:var(--muted); margin-top:8px}
-    .toast{
-      position:fixed; inset:auto auto 18px 50%; transform:translateX(-50%);
-      background:#241b33; color:#fff; padding:10px 14px; border:1px solid #3b2a53; border-radius:10px; display:none;
-    }
-    @media (min-width:740px){ .gridCol{grid-template-columns:1fr} }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rush Royale Stat Overlay</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="wrap">
+  <div class="container">
     <h1>Rush Royale Stat Overlay</h1>
-    <p class="sub">powered by Raging Beasts</p>
+    <p>powered by Raging Beasts</p>
+    <h2 id="welcome-msg"></h2>
 
-    <div class="bar">
-      <div class="hello" id="hello">Welcome back</div>
-      <button id="logoutBtn" class="pill">Logout</button>
-    </div>
+    <!-- Overlay URL Section -->
+    <label for="overlay-url">Overlay URL:</label>
+    <input type="text" id="overlay-url" readonly>
+    <button onclick="copyToClipboard()">Copy</button>
+    <p>Paste this into OBS as a Browser Source.</p>
 
-    <!-- Overlay URL -->
-    <div class="section">
-      <div class="label">Overlay URL</div>
-      <div class="copyRow">
-        <input id="overlayUrl" type="text" readonly value="">
-        <button id="copyBtn" class="btn">Copy</button>
+    <!-- Stats Form Section -->
+    <form id="stats-form">
+      <div class="stats-box">
+        <label for="total-crit">Total Critical Count</label>
+        <input type="number" id="total-crit" placeholder="example" required>
       </div>
-      <div class="note">Paste this into OBS as a Browser Source.</div>
-    </div>
-
-    <!-- Stats Form (single column, placeholders only) -->
-    <div class="section">
-      <div class="gridCol">
-        <div>
-          <div class="label">Total Critical Count</div>
-          <input id="total_crit_count" type="number" placeholder="e.g. 1665" min="0" step="1">
-        </div>
-
-        <div>
-          <div class="label">Season Trophy Start</div>
-          <input id="season_trophy_start" type="number" placeholder="e.g. 4000" min="0" step="1">
-        </div>
-
-        <div>
-          <div class="label">Session Trophy Start</div>
-          <input id="session_trophy_start" type="number" placeholder="e.g. 5000" min="0" step="1">
-        </div>
-
-        <div>
-          <div class="label">Total Trophy Count</div>
-          <input id="total_trophy_count" type="number" placeholder="e.g. 4854" min="0" step="1">
-        </div>
-
-        <div>
-          <div class="label">Session Wins</div>
-          <input id="session_wins" type="number" placeholder="e.g. 5" min="0" step="1">
-        </div>
-
-        <div>
-          <div class="label">Session Losses</div>
-          <input id="session_losses" type="number" placeholder="e.g. 2" min="0" step="1">
-        </div>
+      <div class="stats-box">
+        <label for="season-trophy-start">Season Trophy Start</label>
+        <input type="number" id="season-trophy-start" placeholder="example" required>
       </div>
+      <div class="stats-box">
+        <label for="session-trophy-start">Session Trophy Start</label>
+        <input type="number" id="session-trophy-start" placeholder="example" required>
+      </div>
+      <div class="stats-box">
+        <label for="total-trophy-count">Total Trophy Count</label>
+        <input type="number" id="total-trophy-count" placeholder="example" required>
+      </div>
+      <div class="stats-box">
+        <label for="session-wins">Session Wins</label>
+        <input type="number" id="session-wins" placeholder="example" required>
+      </div>
+      <div class="stats-box">
+        <label for="session-losses">Session Losses</label>
+        <input type="number" id="session-losses" placeholder="example" required>
+      </div>
+      <button type="submit">Save Changes</button>
+    </form>
 
-      <button id="saveBtn" class="btn save">Save Changes</button>
-    </div>
+    <!-- Logout Button -->
+    <button id="logout-btn" class="logout-btn">Logout</button>
+
   </div>
 
-  <div id="toast" class="toast"></div>
-
   <script>
-    if (!window.sb) { alert('Supabase not initialized (config.js).'); }
+    // Auto-detect redirect after logout (same logic as login)
+    const LOGOUT_REDIRECT = window.OAUTH_REDIRECT || `${window.location.origin}/index.html`;
 
-    const hello = document.getElementById('hello');
-    const overlayUrlEl = document.getElementById('overlayUrl');
-    const copyBtn = document.getElementById('copyBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const saveBtn = document.getElementById('saveBtn');
-    const toast = document.getElementById('toast');
-
-    const fields = [
-      'total_crit_count','season_trophy_start','session_trophy_start',
-      'total_trophy_count','session_wins','session_losses'
-    ];
-
-    const els = Object.fromEntries(fields.map(id => [id, document.getElementById(id)]));
-
-    function showToast(msg){
-      toast.textContent = msg; toast.style.display='block';
-      setTimeout(()=> toast.style.display='none', 1800);
-    }
-
-    function getProviderIcon(p){
-      if (p === 'twitch') return '🟣 Twitch';
-      if (p === 'discord') return '🔵 Discord';
-      return '📧 Email';
-    }
-
-    async function ensureRow(uid){
-      const { data, error } = await sb
-        .from('creator_stats')
-        .select('uid')
-        .eq('uid', uid)
-        .single();
-
-      if (!data) {
-        // create default row of zeroes
-        await sb.from('creator_stats').insert({
-          uid, total_crit_count:0, season_trophy_start:0, session_trophy_start:0,
-          total_trophy_count:0, session_wins:0, session_losses:0
-        });
+    // Logout Function
+    async function logout() {
+      try {
+        await sb.auth.signOut();
+        window.location.href = LOGOUT_REDIRECT;
+      } catch (err) {
+        console.error("Logout failed:", err);
+        alert("Logout error, check console.");
       }
     }
 
-    async function load(){
-      const { data: { user } } = await sb.auth.getUser();
-      const session = (await sb.auth.getSession()).data.session;
+    // Setup logout button event
+    document.getElementById("logout-btn").addEventListener("click", logout);
 
-      if (!user || !session){
-        window.location.href = '/';
-        return;
-      }
+    // Auto-fill user details after login
+    if (!window.sb) {
+      alert("Supabase not loaded — check config.js");
+      throw new Error("Supabase missing");
+    }
 
-      const provider = session?.user?.app_metadata?.provider || 'email';
-      hello.innerHTML = `Welcome back, <strong>${user.user_metadata?.user_name || user.user_metadata?.full_name || 'creator'}</strong> <span style="color:#b9a8e6">(${getProviderIcon(provider)})</span>`;
-
-      const uid = user.id;
-      overlayUrlEl.value = `${window.location.origin}/overlay/${uid}`;
-
-      await ensureRow(uid);
-
-      const { data } = await sb.from('creator_stats').select('*').eq('uid', uid).single();
-      if (data){
-        // autopopulate saved values (placeholders remain if 0)
-        fields.forEach(f => {
-          if (typeof data[f] === 'number' && data[f] !== 0) els[f].value = String(data[f]);
-        });
+    async function displayUserInfo() {
+      const user = sb.auth.user();
+      if (user) {
+        document.getElementById("welcome-msg").textContent = `Welcome back, ${user.user_metadata.name} (${user.provider})`;
+        const overlayUrl = `${window.location.origin}/overlay/${user.id}`;
+        document.getElementById("overlay-url").value = overlayUrl;
+      } else {
+        alert("User not authenticated.");
+        window.location.href = `${window.location.origin}/index.html`;
       }
     }
 
-    copyBtn.addEventListener('click', async ()=>{
-      try{
-        await navigator.clipboard.writeText(overlayUrlEl.value);
-        showToast('Overlay URL copied');
-      }catch{ showToast('Copy failed'); }
+    // Run display function on load
+    displayUserInfo();
+
+    // Copy overlay URL to clipboard
+    function copyToClipboard() {
+      const overlayUrl = document.getElementById("overlay-url");
+      overlayUrl.select();
+      document.execCommand("copy");
+      alert("Overlay URL copied to clipboard!");
+    }
+
+    // Handle the stats form submission (for saving data)
+    document.getElementById("stats-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Collect form data
+      const statsData = {
+        totalCrit: document.getElementById("total-crit").value,
+        seasonTrophyStart: document.getElementById("season-trophy-start").value,
+        sessionTrophyStart: document.getElementById("session-trophy-start").value,
+        totalTrophyCount: document.getElementById("total-trophy-count").value,
+        sessionWins: document.getElementById("session-wins").value,
+        sessionLosses: document.getElementById("session-losses").value
+      };
+
+      // Save data to Supabase (assuming you've set up a table in Supabase to store this info)
+      const { error } = await sb.from("creator_stats").upsert([
+        { 
+          uid: sb.auth.user().id, // User ID from Supabase session
+          ...statsData
+        ]
+      ]);
+
+      if (error) {
+        console.error("Error saving stats:", error);
+        alert("Failed to save stats");
+      } else {
+        alert("Stats saved successfully!");
+      }
     });
-
-    logoutBtn.addEventListener('click', async ()=>{
-      try{
-        await sb.auth.signOut({ scope:'global' }); // nukes all sessions (SSO)
-      }catch(e){}
-      sessionStorage.clear(); localStorage.clear();
-      window.location.href = '/';
-    });
-
-    saveBtn.addEventListener('click', async ()=>{
-      const { data:{user} } = await sb.auth.getUser();
-      if (!user) return;
-      const uid = user.id;
-
-      const payload = Object.fromEntries(fields.map(f => [f, Number(els[f].value || 0)]));
-      payload.updated_at = new Date().toISOString();
-
-      const { error } = await sb.from('creator_stats').upsert([{ uid, ...payload }], { onConflict:'uid' });
-      if (error) { console.error(error); showToast('Save failed'); }
-      else showToast('Saved');
-    });
-
-    load();
   </script>
 </body>
 </html>
