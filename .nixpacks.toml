@@ -1,19 +1,13 @@
-{
-  phases = {
-    install = {
-      cmds = [
-        "npm install"
-      ];
-    };
-    start = {
-      cmd = "node server.js";
-    };
-  };
+[build]
+  builder = "NIXPACKS"
+  buildCommand = "npm install"
 
-  # In your .nixpacks file or nix configuration
-  buildInputs = [
-    pkgs.python310  # Ensure this points to the Python 3.10 version
-    pkgs.nodejs
-    pkgs.npm
-  ];
-}
+[deploy]
+  startCommand = "node server.js"
+
+# In your .nixpacks.toml or Nixpack configuration
+[env]
+  PIPENV_DEFAULT_PYTHON_VERSION = "3.10"  # Set Python version to 3.10 for compatibility
+
+[inputs]
+  buildInputs = ["python310", "nodejs", "npm"]
