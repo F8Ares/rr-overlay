@@ -1,10 +1,10 @@
 {
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "npm install", 
+    "buildCommand": "npm install",
     "env": {
-      "PYTHON_VERSION": "3.10",  // Enforcing Python 3.10
-      "NODE_ENV": "production"   // You may also define the environment as 'production'
+      "PYTHON_VERSION": "3.10",
+      "NODE_ENV": "production"
     }
   },
   "deploy": {
