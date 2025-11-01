@@ -1,78 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Rush Royale Stat Overlay — Login</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rush Royale Stat Overlay – Login</title>
+  <link rel="stylesheet" href="styles.css" />
+  
+  <!-- Load Supabase CDN first -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Load config that creates window.sb + window.OAUTH_REDIRECT -->
   <script src="config.js"></script>
+
   <style>
-    :root{color-scheme:dark light}
-    body{background:#120e17;color:#ddd;font-family:system-ui,Segoe UI,Roboto,Arial;margin:0}
-    .wrap{max-width:760px;margin:6rem auto;padding:0 1rem;text-align:center}
-    h1{color:#c9a5ff;margin:0 0 .25rem}
-    .sub{opacity:.85;margin:.25rem 0 2rem}
-    .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-    .btn{border:0;border-radius:10px;padding:.85rem 1.2rem;font-weight:700;cursor:pointer}
+    body{background:#120e17;color:#cbb3ff;font-family:system-ui,Segoe UI,Roboto,Arial}
+    .container{max-width:760px;margin:6rem auto;text-align:center;padding:0 1rem}
+    h1{font-size:2.2rem;margin:0 0 .25rem}
+    p.sub{opacity:.8;margin:.25rem 0 2rem}
+    .btn-row{display:flex;gap:12px;justify-content:center}
+    button{border:0;border-radius:10px;padding:.8rem 1.2rem;font-weight:600;cursor:pointer}
     .twitch{background:#9146ff;color:#fff}
-    .discord{background:#5865F2;color:#fff}
-    #msg{margin-top:16px;color:#ffb4c2}
+    .discord{background:#5865f2;color:#fff}
+    #msg{margin-top:16px;color:#ff9aa2}
   </style>
 </head>
+
 <body>
-  <div class="wrap">
+  <div class="container">
     <h1>Rush Royale Stat Overlay</h1>
     <p class="sub">powered by Raging Beasts</p>
-
     <h2>Sign In Below</h2>
-    <div class="row">
-      <button id="btn-twitch" class="btn twitch">Login with Twitch</button>
-      <button id="btn-discord" class="btn discord">Login with Discord</button>
+
+    <div class="btn-row">
+      <button id="login-twitch" class="twitch">Login with Twitch</button>
+      <button id="login-discord" class="discord">Login with Discord</button>
     </div>
+
     <div id="msg"></div>
   </div>
 
   <script>
+    // Ensure Supabase client exists
+    if (!window.sb) {
+      document.getElementById('msg').textContent =
+        'Supabase client not initialized. Check config.js.';
+      throw new Error('No Supabase client (sb) present');
+    }
+
     const msg = document.getElementById('msg');
 
-    async function ensureRow(uid) {
-      // Create row on first login if missing
-      await sb.from('creator_stats').upsert({ uid }, { onConflict: 'uid' });
-    }
-
-    // If already signed in, jump straight to dashboard
-    sb.auth.getSession().then(async ({ data }) => {
-      if (data?.session) {
-        await ensureRow(data.session.user.id);
-        window.location.replace('/dashboard.html');
-      }
-    });
-
-    // Standard OAuth
     async function signIn(provider) {
       msg.textContent = `Connecting to ${provider}…`;
-      const { error } = await sb.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${window.location.origin}/dashboard.html`
-        }
-      });
-      if (error) {
-        console.error(error);
-        msg.textContent = `Login error: ${error.message}`;
+      try {
+        const { error } = await sb.auth.signInWithOAuth({
+          provider,
+          options: { redirectTo: window.OAUTH_REDIRECT }
+        });
+        if (error) throw error;
+      } catch (e) {
+        console.error(e);
+        msg.textContent = `Login error: ${e.message || e}`;
       }
     }
 
-    document.getElementById('btn-twitch').addEventListener('click', () => signIn('twitch'));
-    document.getElementById('btn-discord').addEventListener('click', () => signIn('discord'));
+    document.getElementById('login-twitch')
+      .addEventListener('click', () => signIn('twitch'));
 
-    // Handle the post-redirect case too
-    sb.auth.onAuthStateChange(async (evt, session) => {
-      if (evt === 'SIGNED_IN' && session?.user?.id) {
-        await ensureRow(session.user.id);
-        window.location.replace('/dashboard.html');
-      }
-    });
+    document.getElementById('login-discord')
+      .addEventListener('click', () => signIn('discord'));
   </script>
+
 </body>
 </html>
