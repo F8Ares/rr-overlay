@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Rush Royale Overlay</title>
+  <link rel="stylesheet" href="/overlay.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+</head>
+<body>
+  <div class="outer"> <!-- NEW: full neon panel -->
+    <div class="wrap">
+      <div class="row">
+        <div class="card">
+          <div class="meta"><img src="/icons/trophy.png" alt=""/> TOTAL TROPHIES</div>
+          <div id="totalTrophies" class="value">—</div>
+        </div>
+        <div class="card">
+          <div class="meta"><img src="/icons/sword.png" alt=""/> TOTAL CRIT</div>
+          <div id="totalCrit" class="value">—</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="card">
+          <div class="meta"><img src="/icons/trophy.png" alt=""/> STREAM GAIN</div>
+          <div id="streamGain" class="value">—</div>
+        </div>
+        <div class="card">
+          <div class="meta"><img src="/icons/trophy.png" alt=""/> SEASON GAIN</div>
+          <div id="seasonGain" class="value">—</div>
+        </div>
+      </div>
+
+      <div class="centerRow">
+        <div class="wlCard">
+          <div class="meta small"><img src="/icons/wl.png" alt=""/> STREAM W/L</div>
+          <div id="wlValue" class="value">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" style="display:none;"></div>
+  <script src="/overlay.js"></script>
+</body>
+</html>

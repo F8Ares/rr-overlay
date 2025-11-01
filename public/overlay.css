@@ -1,0 +1,76 @@
+:root{
+  --bg: transparent;                 /* keep OBS-friendly transparent outside */
+  --panel: #1a1621ea;                /* panel background */
+  --panelBorder: #6b4fd1;            /* neon border color */
+  --panelGlow: #7c3aed88;            /* big outer glow */
+  --innerGlow: #7c3aed55;            /* inner glow */
+  --card:#201a2aee;
+  --cardBorder:#3b2a53;
+  --text:#efe9ff;
+  --muted:#c9b8ff;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg);
+  font-family: Inter,system-ui,Segoe UI,Roboto,Arial; color:var(--text);
+}
+
+/* NEW: full neon panel wrappers */
+.outer{
+  display:inline-block;
+  padding:18px;
+  border-radius:24px;
+  background: var(--panel);
+  border:2px solid var(--panelBorder);
+  box-shadow:
+     0 0 30px var(--panelGlow),
+     inset 0 0 30px var(--innerGlow);
+}
+.wrap{padding:6px}
+
+.row{
+  display:grid; grid-template-columns:1fr; gap:14px; margin-bottom:14px;
+}
+@media(min-width:900px){ .row{grid-template-columns:1fr 1fr} }
+
+.card{
+  position:relative; 
+  border-radius:16px; 
+  background:var(--card);
+  border:1px solid var(--cardBorder);
+  box-shadow: inset 0 0 18px var(--innerGlow);
+  padding:14px 18px;
+  text-align:center;            /* ✅ NEW */
+}
+
+.wlCard{
+  position:relative; 
+  width:min(560px,96%); 
+  margin-inline:auto; 
+  border-radius:16px;
+  background:var(--card); 
+  border:1px solid var(--cardBorder);
+  box-shadow: inset 0 0 18px var(--innerGlow);
+  padding:14px 18px;
+  text-align:center;            /* ✅ NEW */
+}
+.centerRow{display:flex; justify-content:center}
+
+.meta{
+  display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.08em; color:var(--muted);
+  text-transform:uppercase; font-size:15px; margin-bottom:8px;
+}
+.meta img{height:20px; width:auto; filter:drop-shadow(0 0 6px #0008)}
+.meta.small{font-size:14px}
+
+.value{
+  font-size:44px; font-weight:800; letter-spacing:.5px; text-shadow:0 0 10px #0007;
+}
+
+/* toast (debug/errors) */
+.toast{
+  position:fixed; left:50%; bottom:10px; transform:translateX(-50%);
+  background:#2d2140; color:#fff; border:1px solid #483070; padding:10px 14px; border-radius:10px;
+}

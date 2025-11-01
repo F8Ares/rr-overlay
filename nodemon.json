@@ -1,0 +1,5 @@
+{
+  "ignore": ["public/icons/*", "public/images/*"],
+  "ext": "js,html,css",
+  "watch": ["server.js", "public"]
+}
