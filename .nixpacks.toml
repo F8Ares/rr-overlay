@@ -6,7 +6,11 @@
   startCommand = "node server.js"
 
 [inputs]
-  buildInputs = ["python310", "nodejs", "npm"]
+  buildInputs = [
+    pkgs.python310
+    pkgs.nodejs
+    pkgs.npm
+  ]
 
 [env]
-  PIPENV_DEFAULT_PYTHON_VERSION = "3.10"  # Make sure Python 3.10 is being used
+  PIPENV_DEFAULT_PYTHON_VERSION = "3.10"  # Force Python 3.10 to be used
