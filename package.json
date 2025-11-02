@@ -4,20 +4,20 @@
   "description": "Rush Royale Stat Overlay for Streamers",
   "type": "module",
   "main": "server.js",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.7",
-    "dotenv": "^17.2.3",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
-  },
-  "engines": {
-    "node": "20.x"
   },
   "license": "ISC"
 }
